@@ -1,4 +1,4 @@
-package pl.juhas.rezerwacje_teatr;
+package pl.juhas.theater;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
