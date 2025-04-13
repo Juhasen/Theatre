@@ -8,7 +8,7 @@ The system allows users to reserve seats for various performances in different r
 
 ### Key Features
 
-- Multiple **ticket types** (e.g., regular, student, discounted)
+- Multiple **ticket types** (e.g., normal, student, discounted)
 - Support for **multiple rooms**
 - **Performances** can be shown multiple times and in different rooms
 - **Reservations** can either be **confirmed** or **expired**
