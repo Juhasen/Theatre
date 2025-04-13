@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.model;
+package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,12 @@ public class Seat {
     private Long id;
 
     private Integer row;
+
+    @Column(name = "column_number")
     private Integer column;
+
+    @Column(name = "is_available")
     private Boolean isAvailable;
+
 
 }

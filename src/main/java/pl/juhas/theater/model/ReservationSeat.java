@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.model;
+package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,5 +20,12 @@ public class ReservationSeat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    private Seat seat;
 
+    @OneToOne
+    private Reservation reservation;
+
+    @OneToOne
+    private Performance performance;
 }

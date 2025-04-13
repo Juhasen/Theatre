@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.model;
+package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,5 +25,11 @@ public class Performance {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime time;
+
+    @OneToMany
+    private List<Room> rooms;
+
+    @OneToOne
+    private Play play;
 
 }

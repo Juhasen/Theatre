@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.model;
+package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +22,11 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
 
 
 }

@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.enums;
+package pl.juhas.theater.enums;
 
 public enum TicketType {
     NORMAL,
