@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import pl.juhas.theater.enums.ReservationStatus;
-import pl.juhas.theater.enums.TicketType;
 
 import java.util.List;
 
@@ -21,10 +19,12 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "status_id")
     private ReservationStatus status;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     @ManyToOne
