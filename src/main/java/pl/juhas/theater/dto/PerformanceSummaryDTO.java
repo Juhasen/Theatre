@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.dto;
+package pl.juhas.theater.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

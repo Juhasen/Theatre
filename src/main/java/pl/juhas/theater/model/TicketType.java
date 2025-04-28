@@ -1,4 +1,4 @@
-﻿package pl.juhas.theater.model;
+package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
