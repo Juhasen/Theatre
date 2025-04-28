@@ -23,7 +23,7 @@ public class Room {
     private Integer rows;
     private Integer columns;
 
-    @OneToMany
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Seat> seats;
 
 }

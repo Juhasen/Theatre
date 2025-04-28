@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-import java.util.List;
 
 // Connector: Reservation <-> Seat <-> Performance
 @Data
@@ -20,12 +19,12 @@ public class ReservationSeat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Seat seat;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Reservation reservation;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Performance performance;
 }

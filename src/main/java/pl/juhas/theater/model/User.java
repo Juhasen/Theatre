@@ -24,7 +24,7 @@ public class User {
     private String email;
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 
 

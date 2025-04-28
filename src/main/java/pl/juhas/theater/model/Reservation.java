@@ -32,10 +32,11 @@ public class Reservation {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performance_id", nullable = false)
     private Performance performance;
 
-    @OneToMany
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Seat> seat;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
