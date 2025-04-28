@@ -26,12 +26,12 @@ public class Performance {
     private LocalDateTime date;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime time;
+    private LocalDateTime startTime;
 
-    @OneToMany
+    @OneToMany(mappedBy = "performance")
     private List<Room> rooms;
 
-    @OneToOne
+    @ManyToOne
     private Play play;
 
 }
