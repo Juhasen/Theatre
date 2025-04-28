@@ -28,8 +28,9 @@ public class Performance {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startTime;
 
-    @OneToMany(mappedBy = "performance")
-    private List<Room> rooms;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @ManyToOne
     private Play play;
