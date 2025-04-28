@@ -1,10 +1,7 @@
 ﻿package pl.juhas.theater.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 
 
 @Data
@@ -19,4 +16,8 @@ public class ReservationStatus {
     private Long id;
 
     private String status;
+
+    public ReservationStatus(String status) {
+        this.status = status;
+    }
 }

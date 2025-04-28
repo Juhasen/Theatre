@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-import java.util.List;
-
 @Data
 @With
 @Entity
@@ -25,4 +23,11 @@ public class Play {
     private String genre;
     private Integer duration; // in minutes
 
+    public Play(String title, String description, String director, String genre, Integer duration) {
+        this.title = title;
+        this.description = description;
+        this.director = director;
+        this.genre = genre;
+        this.duration = duration;
+    }
 }

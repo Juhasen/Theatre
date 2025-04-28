@@ -51,11 +51,7 @@ class TheaterApplicationTests {
         roomRepository.save(room);
 
         // Create and save Play
-        Play play = new Play("Sample Play", "A sample description of the play.", 120);
-        play.setGenre("Drama");
-        play.setDirector("Jane Doe");
-        play.setPrice(50.0);
-        play.setReleaseDate(LocalDateTime.now().minusMonths(1));
+        Play play = new Play("Sample Play", "A sample description of the play.", "Joe Jackson", "Action", 120);
         playRepository.save(play);
 
         // Create and save Performance
@@ -72,18 +68,17 @@ class TheaterApplicationTests {
         user.setLastName("Doe");
         userRepository.save(user);
 
+
+        //Create Status
+        ReservationStatus status = new ReservationStatus("CONFIRMED");
+
         // Create and save Reservation
         reservation = new Reservation();
         reservation.setPerformance(performance);
         reservation.setUser(user);
-        reservation.setStatus("CONFIRMED");
+        reservation.setStatus(status);
         reservationRepository.save(reservation);
 
-        // Optionally, create and save seats for this room
-        for (int i = 0; i < room.getCapacity(); i++) {
-            Seat seat = new Seat();
-            seatRepository.save(seat);
-        }
     }
 
     @Test
