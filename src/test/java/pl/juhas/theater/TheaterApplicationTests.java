@@ -15,6 +15,7 @@ import pl.juhas.theater.repository.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -129,17 +130,20 @@ class TheaterApplicationTests {
 
     @Test
     void contextLoads() {
-        log.info("Testing if repositories are loaded correctly...");
         assertThat(performanceRepository).isNotNull();
         assertThat(reservationRepository).isNotNull();
         assertThat(roomRepository).isNotNull();
         assertThat(reservationSeatRepository).isNotNull();
-        log.info("All repositories are loaded successfully.");
+        assertThat(seatRepository).isNotNull();
+        assertThat(playRepository).isNotNull();
+        assertThat(userRepository).isNotNull();
+        assertThat(reservationStatusRepository).isNotNull();
     }
 
     //1. Listę przedstawień granych w sali o danym id.
     @Test
     void testFindPerformanceSummariesByRoomId() {
+        log.info("------------------------------testFindPerformanceSummariesByRoomId-------------------------------");
         //Create 5 more performances
         for (int i = 0; i < 5; i++){
             Performance performance = new Performance();
@@ -170,17 +174,19 @@ class TheaterApplicationTests {
     //2. Listę przedstawień o danym id.
     @Test
     void testFindPerformanceSummariesById() {
+        log.info("------------------------------testFindPerformanceSummariesById-------------------------------");
         var result = performanceRepository.findPerformanceSummariesById(performance.getId());
 
         log.info("Performance summary found by ID {}: {}", performance.getId(), result);
 
         assertThat(result).hasSize(1);
-        assertThat(result.getFirst().getId()).isEqualTo(performance.getId());
+        assertThat(result.getFirst().getTitle()).isEqualTo(performance.getPlay().getTitle());
     }
 
     //3. Listę przedstawień o danym tytule.
     @Test
     void testFindPerformanceSummariesByPlayTitle() {
+        log.info("------------------------------testFindPerformanceSummariesByPlayTitle-------------------------------");
         // Create 5 more performances with the same play title
         for(int i = 0; i < 5; i++){
             Performance performance = new Performance();
@@ -204,6 +210,7 @@ class TheaterApplicationTests {
     //4. Listę uczestników na przedstawieniu o danym id.
     @Test
     void testFindUsersByPerformanceId() {
+        log.info("------------------------------testFindUsersByPerformanceId-------------------------------");
         //Create 5 more users for the same performance
         for (int i = 0; i < 5; i++){
             User user = new User();
@@ -239,6 +246,7 @@ class TheaterApplicationTests {
     //5. Listę przedstawień uczestnika o danym id.
     @Test
     void testFindPerformancesByUserId() {
+        log.info("------------------------------testFindPerformancesByUserId-------------------------------");
         //Create 5 more performances for the same user
         for (int i = 0; i < 5; i++){
             Performance performance = new Performance();
@@ -261,7 +269,7 @@ class TheaterApplicationTests {
         var result = reservationRepository.findPerformancesByUserId(user.getId(), pageable);
 
         result.getContent().forEach(p ->
-                log.info("Performance found: id={}, title={}, startTime={}", p.getId(), p.getTitle(), p.getStartTime())
+                log.info("Performance found: title={}, startTime={}", p.getTitle(), p.getStartTime())
         );
 
         assertThat(result).isNotEmpty();
@@ -272,6 +280,7 @@ class TheaterApplicationTests {
     //6. Listę przedstawień uczestnika o danym loginie.
     @Test
     void testFindPerformancesByUserLogin() {
+        log.info("------------------------------testFindPerformancesByUserLogin-------------------------------");
         //Create 5 more performances for the same user
         for (int i = 0; i < 5; i++){
             Performance performance = new Performance();
@@ -293,8 +302,9 @@ class TheaterApplicationTests {
         Pageable pageable = PageRequest.of(0, 5);
         var result = reservationRepository.findPerformanceByUserEmail(user.getEmail(), pageable);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         result.getContent().forEach(p ->
-                log.info("Performance found: id={}, title={}, startTime={}", p.getId(), p.getTitle(), p.getStartTime())
+                log.info("Performance found: title={}, startTime={}", p.getTitle(), p.getStartTime().format(formatter))
         );
 
         assertThat(result).isNotEmpty();
@@ -304,6 +314,7 @@ class TheaterApplicationTests {
     //7. Liczbę miejsc zajętych w danej sali o danej godzinie.
     @Test
     void testCountOccupiedSeats() {
+        log.info("------------------------------testCountOccupiedSeats-------------------------------");
         // Create 5 more reservations for the same performance
         for (int i = 0; i < 8; i++){
             Reservation reservation = new Reservation();
@@ -331,7 +342,8 @@ class TheaterApplicationTests {
 
     //8. Liczbę sal, w których wystawiano przedstawienie o danym id.
     @Test
-    void testCountRoomsByPerformanceId() {
+    void testCountRoomsByPlayId() {
+        log.info("------------------------------testCountRoomsByPlayId-------------------------------");
         // Create 5 more performances in different rooms
         for (int i = 0; i < 5; i++){
             Room room = new Room();
@@ -350,5 +362,40 @@ class TheaterApplicationTests {
         log.info("Number of rooms where play with ID {} was held: {}", play.getId(), count);
 
         assertThat(count).isEqualTo(6);
+    }
+
+    //9. Liczbę miejsc, jaką kupił w teatrze dany użytkownik w danym przedziale dat.
+    @Test
+    void testCountTicketsBoughtByUserInDateRange() {
+        log.info("------------------------------testCountTicketsBoughtByUserInDateRange-------------------------------");
+        // Create 5 more reservations for the same user in different date ranges
+        for (int i = 0; i < 5; i++){
+            Reservation reservation = new Reservation();
+            reservation.setPerformance(performance);
+            reservation.setUser(user);
+            reservation.setStatus(reservationStatusRepository.findByName("confirmed"));
+            reservation.setTicketType(ticketTypeRepository.findByType("standard"));
+            reservation.setCreatedAt(LocalDateTime.now().minusDays(i));
+            ReservationSeat reservationSeat = new ReservationSeat();
+            Seat seat = new Seat();
+            seat.setRow(i);
+            seat.setColumn(i);
+            seat.setIsAvailable(false);
+            seatRepository.save(seat);
+            reservationSeat.setSeat(seat);
+            reservationSeat.setReservation(reservation);
+            reservation.setReservationSeats(List.of(reservationSeat));
+            reservationRepository.save(reservation);
+        }
+
+        LocalDateTime startDate = LocalDateTime.now().minusDays(3);
+        LocalDateTime endDate = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+        Long count = reservationSeatRepository.countTicketsBoughtByUserInDateRange(user.getId(), startDate, endDate);
+        log.info("Number of tickets bought by user {} in date range {} to {}: {}", user.getId(), startDate.format(formatter), endDate.format(formatter), count);
+
+        assertThat(count).isEqualTo(4);
     }
 }

@@ -17,13 +17,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "r.performance.id, r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
+            "r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
             "FROM Reservation r " +
             "WHERE r.user.email = :email ")
     Page<PerformanceSummaryDTO> findPerformanceByUserEmail(@Param("email") String login, Pageable pageable);
 
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "r.performance.id, r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
+            "r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
             "FROM Reservation r " +
             "WHERE r.user.id = :id ")
     Page<PerformanceSummaryDTO> findPerformancesByUserId(Long id, Pageable pageable);

@@ -21,8 +21,7 @@ public interface ReservationSeatRepository extends JpaRepository<ReservationSeat
     @Query("SELECT COUNT(seat.id) " +
             "FROM ReservationSeat seat " +
             "WHERE seat.reservation.user.id = :userId " +
-            "AND seat.reservation.createdAt BETWEEN :startDate AND :endDate " +
-            "AND seat.reservation.status.name = 'CONFIRMED'")
+            "AND seat.reservation.createdAt BETWEEN :startDate AND :endDate")
     Long countTicketsBoughtByUserInDateRange(
             @Param("userId") Long userId,
             @Param("startDate") LocalDateTime startDate,

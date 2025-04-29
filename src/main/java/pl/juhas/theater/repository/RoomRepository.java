@@ -6,7 +6,4 @@ import org.springframework.data.repository.query.Param;
 import pl.juhas.theater.model.Room;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-
-    @Query("SELECT COUNT(DISTINCT p.room.id) FROM Performance p WHERE p.play.id = :playId")
-    Long countDistinctRoomsByPlayId(@Param("playId") Long playId);
 }

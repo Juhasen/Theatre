@@ -9,7 +9,6 @@ import lombok.With;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @With
@@ -22,10 +21,7 @@ public class Performance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime date;
-
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime startTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

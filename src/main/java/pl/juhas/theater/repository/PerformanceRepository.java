@@ -14,21 +14,21 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
 
 
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "p.id, p.play.title, p.startTime, p.room.name) " +
+            "p.play.title, p.startTime, p.room.name) " +
             "FROM Performance p " +
             "WHERE p.room.id = :roomId")
     Page<PerformanceSummaryDTO> findPerformanceSummariesByRoomId(@Param("roomId") Long roomId, Pageable pageable);
 
 
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "p.id, p.play.title, p.startTime, p.room.name) " +
+            "p.play.title, p.startTime, p.room.name) " +
             "FROM Performance p " +
             "WHERE p.id = :performanceId")
     List<PerformanceSummaryDTO> findPerformanceSummariesById(@Param("performanceId") Long performanceId);
 
 
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "p.id, p.play.title, p.startTime, p.room.name) " +
+            "p.play.title, p.startTime, p.room.name) " +
             "FROM Performance p " +
             "WHERE LOWER(p.play.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     Page<PerformanceSummaryDTO> findPerformanceSummariesByPlayTitle(@Param("title") String title, Pageable pageable);
