@@ -7,7 +7,6 @@ import pl.juhas.theater.model.Room;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    // 8) Liczba sal, w których wystawiano przedstawienie o danym id
     @Query("SELECT COUNT(DISTINCT p.room.id) FROM Performance p WHERE p.play.id = :playId")
     Long countDistinctRoomsByPlayId(@Param("playId") Long playId);
 }

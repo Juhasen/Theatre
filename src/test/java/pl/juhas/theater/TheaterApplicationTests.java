@@ -56,6 +56,8 @@ class TheaterApplicationTests {
     private Room room;
     private User user;
 
+    private Play play;
+
     @BeforeEach
     void setUp() {
         performanceRepository.deleteAll();
@@ -83,7 +85,7 @@ class TheaterApplicationTests {
         roomRepository.save(room);
 
         // Create and save Play
-        Play play = new Play("Sample Play", "A sample description of the play.", "Joe Jackson", "Action", 120);
+        play = new Play("Sample Play", "A sample description of the play.", "Joe Jackson", "Action", 120);
         playRepository.save(play);
 
         // Create and save Performance
@@ -303,17 +305,49 @@ class TheaterApplicationTests {
     @Test
     void testCountOccupiedSeats() {
         // Create 5 more reservations for the same performance
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 8; i++){
             Reservation reservation = new Reservation();
             reservation.setPerformance(performance);
             reservation.setUser(user);
             reservation.setStatus(reservationStatusRepository.findByName("confirmed"));
             reservation.setTicketType(ticketTypeRepository.findByType("standard"));
+            ReservationSeat reservationSeat = new ReservationSeat();
+            Seat seat = new Seat();
+            seat.setRow(i);
+            seat.setColumn(i);
+            seat.setIsAvailable(false);
+            seatRepository.save(seat);
+            reservationSeat.setSeat(seat);
+            reservationSeat.setReservation(reservation);
+            reservation.setReservationSeats(List.of(reservationSeat));
             reservationRepository.save(reservation);
         }
 
-        Long count = reservationSeatRepository.countOccupiedSeats(room.getId(), performance.getStartTime().minusHours(1), performance.getStartTime().plusHours(2));
+        Long count = reservationSeatRepository.countOccupiedSeats(room.getId(), performance.getStartTime());
         log.info("Number of occupied seats in room {} at time {}: {}", room.getId(), performance.getStartTime(), count);
+
+        assertThat(count).isEqualTo(8);
+    }
+
+    //8. Liczbę sal, w których wystawiano przedstawienie o danym id.
+    @Test
+    void testCountRoomsByPerformanceId() {
+        // Create 5 more performances in different rooms
+        for (int i = 0; i < 5; i++){
+            Room room = new Room();
+            room.setName("Room " + (i + 2));
+            room.setSeats(seatRepository.findAll());
+            roomRepository.save(room);
+
+            Performance performance = new Performance();
+            performance.setStartTime(LocalDateTime.of(LocalDate.now().plusDays(i + 10), LocalTime.of(i, i+2)));
+            performance.setRoom(room);
+            performance.setPlay(play);
+            performanceRepository.save(performance);
+        }
+
+        Long count = performanceRepository.countRoomsByPlay_Id(play.getId());
+        log.info("Number of rooms where play with ID {} was held: {}", play.getId(), count);
 
         assertThat(count).isEqualTo(6);
     }

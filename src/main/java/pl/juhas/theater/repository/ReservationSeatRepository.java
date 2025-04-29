@@ -9,16 +9,15 @@ import java.time.LocalDateTime;
 
 public interface ReservationSeatRepository extends JpaRepository<ReservationSeat, Long> {
 
-    // 7) Liczba miejsc zajętych w danej sali o danej godzinie
     @Query("SELECT COUNT(seat.id) " +
             "FROM ReservationSeat seat " +
-            "WHERE seat.reservation.performance.startTime = :time " +
-            "AND seat.reservation.performance.room.id = :roomId " +
-            "AND seat.reservation.status.name = 'CONFIRMED'")
-    Long countOccupiedSeats(@Param("roomId") Long roomId, @Param("time") LocalDateTime startTime,
-                            @Param("endTime") LocalDateTime endTime);
+            "WHERE seat.reservation.performance.startTime = :startTime " +
+            "AND seat.reservation.performance.room.id = :roomId")
+    Long countOccupiedSeats(@Param("roomId") Long roomId,
+                            @Param("startTime") LocalDateTime startTime);
 
-    // 9) Liczba miejsc kupionych w teatrze przez użytkownika w danym przedziale dat
+
+
     @Query("SELECT COUNT(seat.id) " +
             "FROM ReservationSeat seat " +
             "WHERE seat.reservation.user.id = :userId " +
