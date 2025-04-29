@@ -25,7 +25,7 @@ public class Performance {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime date;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalDateTime startTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

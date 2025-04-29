@@ -15,9 +15,9 @@ public class ReservationStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private String name;
 
     public ReservationStatus(String status) {
-        this.status = status;
+        this.name = status;
     }
 }

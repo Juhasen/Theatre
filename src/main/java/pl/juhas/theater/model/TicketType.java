@@ -19,4 +19,5 @@ public class TicketType {
     private Long id;
 
     private String type;
+    private Double price;
 }

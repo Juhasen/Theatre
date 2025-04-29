@@ -8,29 +8,25 @@ import org.springframework.data.repository.query.Param;
 import pl.juhas.theater.dto.PerformanceSummaryDTO;
 import pl.juhas.theater.model.Reservation;
 import pl.juhas.theater.model.User;
-import pl.juhas.theater.model.Performance;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
-    // 4) Lista uczestników na przedstawieniu o danym id
-    @Query("SELECT r.user FROM Reservation r " +
-            "WHERE r.performance.id = :performanceId " +
-            "AND r.status = 'CONFIRMED'")
+    @Query(
+            "SELECT r.user FROM Reservation r " +
+            "WHERE r.performance.id = :performanceId ")
     Page<User> findUsersByPerformanceId(@Param("performanceId") Long performanceId, Pageable pageable);
 
-    // 5) Lista przedstawień uczestnika o danym id
-    @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
-            "r.performance.id, r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
-            "FROM Reservation r " +
-            "WHERE r.user.id = :userId " +
-            "AND r.status = 'CONFIRMED'")
-    Page<PerformanceSummaryDTO> findPerformanceSummariesByUserId(@Param("userId") Long userId, Pageable pageable);
 
-    // 6) Lista przedstawień uczestnika o danym loginie
     @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
             "r.performance.id, r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
             "FROM Reservation r " +
-            "WHERE r.user.email = :email " +
-            "AND r.status = 'CONFIRMED'")
-    Page<PerformanceSummaryDTO> findPerformanceSummariesByUserLogin(@Param("login") String login, Pageable pageable);
+            "WHERE r.user.email = :email ")
+    Page<PerformanceSummaryDTO> findPerformanceByUserEmail(@Param("email") String login, Pageable pageable);
+
+    @Query("SELECT new pl.juhas.theater.dto.PerformanceSummaryDTO(" +
+            "r.performance.id, r.performance.play.title, r.performance.startTime, r.performance.room.name) " +
+            "FROM Reservation r " +
+            "WHERE r.user.id = :id ")
+    Page<PerformanceSummaryDTO> findPerformancesByUserId(Long id, Pageable pageable);
+
+
 }

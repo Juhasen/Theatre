@@ -32,4 +32,5 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
             "FROM Performance p " +
             "WHERE LOWER(p.play.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     Page<PerformanceSummaryDTO> findPerformanceSummariesByPlayTitle(@Param("title") String title, Pageable pageable);
+
 }
